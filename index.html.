@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LIVE Finder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: white;
+      padding: 20px;
+    }
+    main {
+      max-width: 500px;
+      margin: auto;
+    }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0;
+      border-radius: 8px;
+    }
+    .item {
+      background: #243247;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+    a { color: #8bd5ff; }
+    small { color: #c1ccda; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🔎 LIVE Finder</h1>
+  <p>Quản lý liên kết LIVE công khai</p>
+
+  <input id="liveUrl"
+    placeholder="Dán link LIVE TikTok tại đây">
+
+  <button onclick="addLive()">Thêm liên kết</button>
+
+  <p id="status">Chưa có dữ liệu LIVE được xác minh.</p>
+  <section id="list"></section>
+</main>
+
+<script>
+function addLive() {
+  const input = document.getElementById("liveUrl");
+  const status = document.getElementById("status");
+  const list = document.getElementById("list");
+  let url;
+
+  try {
+    url = new URL(input.value.trim());
+  } catch {
+    status.textContent = "Vui lòng nhập một URL hợp lệ.";
+    return;
+  }
+
+  if (url.protocol !== "https:" ||
+      !["tiktok.com", "www.tiktok.com",
+         "m.tiktok.com", "vm.tiktok.com",
+         "vt.tiktok.com"].includes(url.hostname)) {
+    status.textContent = "Hãy nhập liên kết HTTPS thuộc TikTok.";
+    return;
+  }
+
+  const item = document.createElement("div");
+  item.className = "item";
+
+  const link = document.createElement("a");
+  link.href = url.href;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "Mở LIVE TikTok";
+
+  const note = document.createElement("p");
+  note.textContent = "Liên kết do người dùng nhập; " +
+    "trạng thái LIVE chưa được xác minh.";
+
+  item.append(link, note);
+  list.prepend(item);
+  input.value = "";
+  status.textContent = "Đã thêm liên kết.";
+}
+</script>
+</body>
+</html>
